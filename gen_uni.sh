@@ -1,5 +1,5 @@
 #!/bin/sh
-sh get-uni.sh
+sh ./get_uni.sh
 DMD=dmd
 DFMT=dfmt
 echo building gen_uni_64 and gen_uni_32
