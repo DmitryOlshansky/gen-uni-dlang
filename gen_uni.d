@@ -1,10 +1,8 @@
 //Written in the D programming language
 /**
     gen_uni is a tool to automatically generate source code for unicode data structures.
-    Call gen_uni > tables.d to generate based on latest and greatest from unicode.org.
-    Notes:
-        Uses std.net.curl thus needs curl shared lib & internet connection.
 
+    Run with dmd -run gen_uni.d to generate based on latest and greatest from unicode.org.
 */
 module std.internal.gen_uni;
 
@@ -149,13 +147,13 @@ auto toPairs(K, V)(V[K] aa)
 
 void main(string[] argv)
 {
-    string mode = "a";
+    string mode = "w";
     
     bool minimal = false;
     getopt(argv, "min", &minimal);
-    if(!minimal) {
-        mode = "w";            
-    }        
+    if(minimal) {
+        mode = "a";            
+    }
     auto baseSink = File("unicode_tables.d", mode);
     auto compSink = File("unicode_comp.d", mode);
     auto decompSink = File("unicode_decomp.d", mode);
@@ -482,7 +480,8 @@ void loadUnicodeData(string inp)
 
             dstring dest;
             bool compat = false;
-            std.string.munch(decomp, " ");
+            if (decomp.startsWith(" "))
+                decomp = decomp[1..$];
             if(decomp.front == '<')
             {
                 decomp = findSplitAfter(decomp, ">")[1];
@@ -503,6 +502,7 @@ void loadUnicodeData(string inp)
     }
     // compute Cn as all dchar we have not found in UnicodeData.txt
     general.table["Cn"] = all.inverted;
+    general.aliases["Cn"] = "Unassigned";
     auto arr = combiningClass[1..255];
     foreach(i, clazz; arr)//0 is a default for all of 1M+ codepoints
     {
