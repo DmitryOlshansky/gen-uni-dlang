@@ -22,3 +22,9 @@ docs/
 
 # Code coverage
 *.lst
+
+# Unicode generator stuff
+*.txt
+
+# Generated table files
+unicode_*.d
