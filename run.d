@@ -27,12 +27,12 @@ int main(string[] args) {
             return r.status;
         }
     }
-    auto r32 = execute([rdmd, "-m32", "gen_uni.d"]);
+    auto r32 = execute([rdmd, "-m32", "gen.d"]);
     stderr.writeln(r32.output);
     if(r32.status != 0) {
         return r32.status;     
     }
-    auto r64 = execute([rdmd, "-m64", "gen_uni.d", "--min"]);
+    auto r64 = execute([rdmd, "-m64", "gen.d", "--min"]);
     stderr.writeln(r64.output);
     if(r64.status != 0) {
         return r64.status;     
