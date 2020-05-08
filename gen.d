@@ -871,8 +871,8 @@ void writeDecomposition(File sink)
         writeln("@property");
         writeln("{");
         writeln("private alias _IDCA = immutable(dchar[]);");
-        writefln("_IDCA decompCanonTable() { static _IDCA t = [%( 0x%x, %)]; return t; }", decompCanonFlat);
-        writefln("_IDCA decompCompatTable() { static _IDCA t = [%( 0x%x, %)]; return t; }", decompCompatFlat);
+        writefln("_IDCA decompCanonTable() @safe pure nothrow { static _IDCA t = [%( 0x%x, %)]; return t; }", decompCanonFlat);
+        writefln("_IDCA decompCompatTable() @safe pure nothrow { static _IDCA t = [%( 0x%x, %)]; return t; }", decompCompatFlat);
         writeln("}");
     }
 }
