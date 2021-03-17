@@ -131,6 +131,7 @@ enum {
     caseFoldingSrc = "CaseFolding.txt",
     blocksSrc = "Blocks.txt",
     propListSrc = "PropList.txt",
+    propertyValueAliases = "PropertyValueAliases.txt",
     corePropSrc = "DerivedCoreProperties.txt",
     normalizationPropSrc = "DerivedNormalizationProps.txt",
     scriptsSrc = "Scripts.txt",
@@ -186,6 +187,7 @@ module std.internal.unicode_tables;
     loadProperties(corePropSrc, general);
     loadProperties(scriptsSrc, scripts);
     loadProperties(hangulSyllableSrc, hangul);
+    loadPropertyAliases(propertyValueAliases);
 
     loadUnicodeData(unicodeDataSrc);
     loadSpecialCasing(specialCasingSrc);
@@ -402,16 +404,32 @@ void loadProperties(string inp, ref PropertyTable target)
     })(inp, r);
 }
 
+void loadPropertyAliases(string inp)
+{
+    auto r = regex(`^([\w0-9_]+)\s*;\s*([\w0-9_]+)\s*;\s*([\w0-9_]+)`);
+    scanUniData!((m){
+        auto type = m.captures[1];
+        auto target = m.captures[2].idup;
+        auto label = m.captures[3].idup;
+        if (target != label)
+        {
+            if (type == "blk") 
+                blocks.aliases[label] = target;
+            else if(type == "gc")
+                general.aliases[label] = target;
+            else if(type == "sc")
+                scripts.aliases[label] = target;
+        }
+    })(inp, r);
+}
+
 void loadNormalization(string inp)
 {
     auto r = regex(`^(?:([0-9A-F]+)\.\.([0-9A-F]+)|([0-9A-F]+))\s*;\s*(NFK?[CD]_QC)\s*;\s*([NM])|#\s*[a-zA-Z_0-9]+=([a-zA-Z_0-9]+)`);
-    string aliasStr;
     CodepointSet set; //workaround @@@BUG 6178
     scanUniData!((m){
         auto name = to!string(m.captures[4]) ~ to!string(m.captures[5]);
-        /*if(!m.captures[6].empty)
-            aliasStr = to!string(m.captures[6]);
-        else*/ if(!m.captures[1].empty)
+        if(!m.captures[1].empty)
         {
             auto sa = m.captures[1];
             auto sb = m.captures[2];

@@ -2,6 +2,7 @@ set PREFIX="http://www.unicode.org/Public/UNIDATA/"
 
 curl %PREFIX%/CaseFolding.txt --output CaseFolding.txt
 curl %PREFIX%/Blocks.txt --output Blocks.txt
+curl %PREFIX%/PropertyValueAliases.txt --output PropertyValueAliases.txt
 curl %PREFIX%/PropList.txt --output PropList.txt
 curl %PREFIX%/DerivedCoreProperties.txt --output DerivedCoreProperties.txt
 curl %PREFIX%/DerivedNormalizationProps.txt --output DerivedNormalizationProps.txt
