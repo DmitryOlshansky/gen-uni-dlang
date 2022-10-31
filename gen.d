@@ -414,11 +414,11 @@ void loadPropertyAliases(string inp)
         if (target != label)
         {
             if (type == "blk") 
-                blocks.aliases[label] = target;
+                blocks.aliases[target] = label;
             else if(type == "gc")
-                general.aliases[label] = target;
+                general.aliases[target] = label;
             else if(type == "sc")
-                scripts.aliases[label] = target;
+                scripts.aliases[target] = label;
         }
     })(inp, r);
 }

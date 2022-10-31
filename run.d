@@ -12,21 +12,6 @@ import std.stdio : stderr;
 int main(string[] args) {
     auto rdmd = "rdmd";
     auto dfmt = environment.get("DFMT", "dfmt");
-
-    if (os == OS.win32 || os == OS.win64) {
-        auto r = execute(["get_uni.bat"]);
-        stderr.writeln(r.output);
-        if (r.status != 0) {
-            return r.status;
-        }
-    }
-    else {
-        auto r = execute(["sh", "get_uni.sh"]);
-        stderr.writeln(r.output);
-        if (r.status != 0) {
-            return r.status;
-        }
-    }
     auto r32 = execute([rdmd, "-m32", "gen.d"]);
     stderr.writeln(r32.output);
     if(r32.status != 0) {
